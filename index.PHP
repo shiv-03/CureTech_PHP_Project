@@ -22,7 +22,8 @@ if(!$conn){
 if(isset($_GET['delete'])){
   $sno = $_GET['delete'];
   $delete = true;
-  $sql ="DELETE FROM `concerns` WHERE `concerns`.`sno` = $sno";
+  echo $sno;
+  $sql ="DELETE FROM concerns WHERE `sno` = '$sno'";
   $result = mysqli_query($conn, $sql);
 }
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -242,17 +243,9 @@ else{
           <td>" .$row['Concern'] . "</td>
           <td><button class='edit btn btn-sm btn-primary' id=".$row['sno'] .">Edit</button> <button class='delete btn btm-sm btn-primary' id=".$row['sno'] .">Delete</button></td>
         </tr>";
-        //  echo $row['sno'] . " name ". $row['name'] . " description ". $row['Concern'] ;
-        //   echo "<br>"; 
+       
         } 
       ?>
-
-                    <!-- <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr> -->
 
 
                 </tbody>
@@ -265,16 +258,19 @@ else{
     <script src="https://code.jquery.com/jquery-3.6.4.js"
         integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
-    </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"> 
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous">
+    </script>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
         integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
         integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous">
     </script>
-
 
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script>
@@ -302,13 +298,12 @@ else{
     var deletes = document.getElementsByClassName('delete');
     Array.from(deletes).forEach((element) => {
         element.addEventListener("click", (e) => {
-            console.log("delete", );
-            $sno = e.target.id.substr(1, );
-
-            if (confirm("Press a button!")) {
+            console.log("delete", );    
+            let sno = e.target.id;
+             if (confirm("Press a button!")) {
                 console.log("yes");
-                console.log($sno);
-                window.location = '/crud/index.php?delete=${sno}';
+                console.log(sno);
+                window.location = `/crud/index.php?delete=${sno}`;
 
             } else {
                 console.log("no");
