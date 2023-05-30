@@ -4,64 +4,49 @@
 $insert = false;
 $update = false;
 $delete = false;
-// connecting to a database
-$servername = "localhost";
-$username  = "root";
-$password = "";
-$database = "Concern";
 
-$conn = mysqli_connect($servername, $username, $password, $database);
+include_once 'includes/dbConnect.php';
 
-if(!$conn){
-    die ("your connection doesnt established ".mysqli_connect_error());
-
-}
 // else{f
 //     echo "your connection is established";
 // }
-if(isset($_GET['delete'])){
-  $sno = $_GET['delete'];
-  $delete = true;
-  echo $sno;
-  $sql ="DELETE FROM concerns WHERE `sno` = '$sno'";
-  $result = mysqli_query($conn, $sql);
+if (isset($_GET['delete'])) {
+    $sno = $_GET['delete'];
+    $delete = true;
+    echo $sno;
+    $sql = "DELETE FROM concerns WHERE `sno` = '$sno'";
+    $result = mysqli_query($conn, $sql);
 }
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-  // if(isset($Name) || isset($Description)){
-if (isset($_POST['snoEdit'])){
-  // update the record
-  $sno = $_POST["snoEdit"];
-  $Name = $_POST["nameEdit"];
-$Description = $_POST["ConcernEdit"];
+    // if(isset($Name) || isset($Description)){
+    if (isset($_POST['snoEdit'])) {
+        // update the record
+        $sno = $_POST["snoEdit"];
+        $Name = $_POST["nameEdit"];
+        $Description = $_POST["ConcernEdit"];
 
-$sql = "UPDATE `concerns` SET `name` = '$Name', `Concern` = '$Description' WHERE `concerns`.`sno` = $sno";
+        $sql = "UPDATE `concerns` SET `name` = '$Name', `Concern` = '$Description' WHERE `concerns`.`sno` = $sno";
 
-$result = mysqli_query($conn , $sql);
-if($result){
-  $update = true;
-}
-  
-}
-else{
-$Name = $_POST['name'];
-$Description = $_POST['Concern'];
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            $update = true;
+        }
+    } else {
+        $Name = $_POST['name'];
+        $Description = $_POST['Concern'];
 
-$sql = "INSERT INTO `concerns` (`name`, `Concern`) VALUES ('$Name', '$Description')";
+        $sql = "INSERT INTO `concerns` (`name`, `Concern`) VALUES ('$Name', '$Description')";
 
-$result = mysqli_query($conn , $sql);
+        $result = mysqli_query($conn, $sql);
 
-if ($result)
-{
-    // echo "Data inserted successfully";
-    $insert = true; 
-
-}
-else{
-    echo "Something went wrong ".mysqli_connect_error();
-
-}
-}
+        if ($result) {
+            // echo "Data inserted successfully";
+            $insert = true;
+        } else {
+            echo "Something went wrong " . mysqli_connect_error();
+        }
+    }
 }
 ?>
 <!doctype html>
@@ -73,8 +58,7 @@ else{
     <title>Project PHP</title>
 
     <link rel="stylesheet" href="footer.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"> -->
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 </head>
@@ -100,8 +84,7 @@ else{
 
                         <div class="my-3">
                             <label for="exampleInputName" class="form-label">Your Good Name</label>
-                            <input type="text" class="form-control" id="nameEdit" name="nameEdit"
-                                aria-describedby="emailHelp">
+                            <input type="text" class="form-control" id="nameEdit" name="nameEdit" aria-describedby="emailHelp">
                         </div>
 
                         <div class="my-3">
@@ -181,26 +164,26 @@ else{
         </div>
 
         <?php
-      if($insert){
-        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        if ($insert) {
+            echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
         <strong> Success!....</strong> Your record has been inserted succesfully .
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>";
-      }   ?>
+        }   ?>
         <?php
-      if($delete){
-        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        if ($delete) {
+            echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
         <strong> Success!....</strong> Your record has been deleted succesfully .
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>";
-      }  ?>
+        }  ?>
         <?php
-      if($update){
-        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        if ($update) {
+            echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
         <strong> Success!....</strong> Your record has been updated succesfully .
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>";
-      }  ?>
+        }  ?>
 
 
         <div class="container my-3">
@@ -232,20 +215,19 @@ else{
                 </thead>
                 <tbody>
                     <?php
-        $sql = "SELECT * FROM `concerns`";
-        $result = mysqli_query($conn, $sql);
-          $sno = 0;
-        while($row = mysqli_fetch_assoc($result)){
-          $sno = $sno +1;
-          echo "<tr>
-          <th scope='row'>" .$sno . "</th>
-          <td>" .$row['name'] . "</td>
-          <td>" .$row['Concern'] . "</td>
-          <td><button class='edit btn btn-sm btn-primary' id=".$row['sno'] .">Edit</button> <button class='delete btn btm-sm btn-primary' id=".$row['sno'] .">Delete</button></td>
+                    $sql = "SELECT * FROM `concerns`";
+                    $result = mysqli_query($conn, $sql);
+                    $sno = 0;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $sno = $sno + 1;
+                        echo "<tr>
+          <th scope='row'>" . $sno . "</th>
+          <td>" . $row['name'] . "</td>
+          <td>" . $row['Concern'] . "</td>
+          <td><button class='edit btn btn-sm btn-primary' id=" . $row['sno'] . ">Edit</button> <button class='delete btn btm-sm btn-primary' id=" . $row['sno'] . ">Delete</button></td>
         </tr>";
-       
-        } 
-      ?>
+                    }
+                    ?>
 
 
                 </tbody>
@@ -255,70 +237,65 @@ else{
     <hr>
     <?php include 'footer.php'; ?>
 
-    <script src="https://code.jquery.com/jquery-3.6.4.js"
-        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
     </script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
-        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"> 
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
-        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous">
     </script>
- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
-        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
-        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous">
     </script>
 
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script>
-    let table = new DataTable('#myTable');
+        let table = new DataTable('#myTable');
     </script>
     <script>
-    var edits = document.getElementsByClassName('edit');
-    // console.log(edits);
-    // console.log(Array.from(edits));
-    Array.from(edits).forEach((element) => {
-        element.addEventListener("click", (e) => {
-            console.log("edit", );
-            tr = e.target.parentNode.parentNode;
-            title = tr.getElementsByTagName("td")[0].innerText;
-            description = tr.getElementsByTagName("td")[1].innerText;
-            console.log(title, description);
-            nameEdit.value = title;
-            ConcernEdit.value = description;
-            snoEdit.value = e.target.id;
-            console.log(e.target.id);
-            $('#exampleModal').modal('toggle');
+        var edits = document.getElementsByClassName('edit');
+        // console.log(edits);
+        // console.log(Array.from(edits));
+        Array.from(edits).forEach((element) => {
+            element.addEventListener("click", (e) => {
+                console.log("edit", );
+                tr = e.target.parentNode.parentNode;
+                title = tr.getElementsByTagName("td")[0].innerText;
+                description = tr.getElementsByTagName("td")[1].innerText;
+                console.log(title, description);
+                nameEdit.value = title;
+                ConcernEdit.value = description;
+                snoEdit.value = e.target.id;
+                console.log(e.target.id);
+                $('#exampleModal').modal('toggle');
+            })
         })
-    })
 
-    var deletes = document.getElementsByClassName('delete');
-    Array.from(deletes).forEach((element) => {
-        element.addEventListener("click", (e) => {
-            console.log("delete", );    
-            let sno = e.target.id;
-             if (confirm("Press a button!")) {
-                console.log("yes");
-                console.log(sno);
-                window.location = `/crud/index.php?delete=${sno}`;
+        var deletes = document.getElementsByClassName('delete');
+        Array.from(deletes).forEach((element) => {
+            element.addEventListener("click", (e) => {
+                console.log("delete", );
+                let sno = e.target.id;
+                if (confirm("Press a button!")) {
+                    console.log("yes");
+                    console.log(sno);
+                    window.location = `/crud/index.php?delete=${sno}`;
 
-            } else {
-                console.log("no");
-            }
+                } else {
+                    console.log("no");
+                }
+            })
         })
-    })
 
 
 
-    // working line (2 codes)
-    // $(document).on("click", ".edit", function(){
-    // console.log($(this)[0].parentNode.parentNode) 
-    //   console.log($(this).closest("tr").find("#name")[0].innerHTML)
-    //   console.log($(this).closest("tr").find("#concern")[0].innerHTML)
-    // })
+        // working line (2 codes)
+        // $(document).on("click", ".edit", function(){
+        // console.log($(this)[0].parentNode.parentNode) 
+        //   console.log($(this).closest("tr").find("#name")[0].innerHTML)
+        //   console.log($(this).closest("tr").find("#concern")[0].innerHTML)
+        // })
     </script>
 
 </body>

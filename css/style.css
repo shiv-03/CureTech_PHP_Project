@@ -1,0 +1,30 @@
+.slot-box {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    min-height: 180px;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.slot-box:hover {
+    animation: slot 5s;
+}
+
+.booking-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 1rem;
+}
+
+@keyframes slot {
+    50% {
+        background-color: #aaa;
+    }
+}
